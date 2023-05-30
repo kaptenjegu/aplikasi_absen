@@ -8,9 +8,12 @@
 
     <meta name="description" content="overview &amp; stats" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <link href="<?= base_url('assets/images/ikon.ico') ?>" rel="icon">
+    <link href="<?= base_url('assets/images/ikon.ico') ?>" rel="apple-touch-icon">
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/font-awesome/4.5.0/css/font-awesome.min.css" />
-    <!--link rel="stylesheet" href="<? //= base_url() ?>assets/css/fonts.googleapis.com.css" /-->
+    <!--link rel="stylesheet" href="<? //= base_url() 
+                                    ?>assets/css/fonts.googleapis.com.css" /-->
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/ace-skins.min.css" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/ace-rtl.min.css" />
