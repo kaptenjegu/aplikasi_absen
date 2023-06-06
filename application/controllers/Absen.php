@@ -30,21 +30,61 @@ class Absen extends CI_Controller
 		echo date('H') . '<span class="blink_me">:</span>' . date('i');
 	}
 
+	//Fitur absen cuti, sakit, ijin, dll
 	public function tertunda()
 	{
-		$data['judul'] = 'Absen Tertunda';
+		$data['judul'] = 'Ajukan Absen';
 		$data['page'] = 'Absen_tertunda';
 		$data['url'] = base_url('Absen/tertunda');
+
+		$this->db->where('pending >= 4');
+		$this->db->where('pending <= 9');
+		$this->db->where('id_user', $_SESSION['id_akun']);
+		$data['pending'] = $this->db->get('fai_absen')->result();
 
 		$this->load->view('header', $data);
 		$this->load->view('absen_tertunda', $data);
 		$this->load->view('footer');
 	}
 
+	public function simpan_tertunda()
+	{
+		try {
+			$this->db->trans_start();
+			$tgl_absen = $this->input->post('tgl_absen');
+			$pending = $this->input->post('pending');
+			$keterangan = $this->input->post('keterangan');
+			$id_user = $_SESSION['id_akun'];
+			$n = $this->cek_dobel_data($id_user, $tgl_absen, 'masuk');
+			if ($n == 0) {
+				$data = array(
+					'id_absen' => randid(),
+					'id_user' => $id_user,
+					'tgl_absen' => $tgl_absen,
+					'absen_masuk' 	=> '',
+					'absen_pulang' 	=> '',
+					'pending' 	=> $pending,
+					'catatan_pending' 	=> $keterangan
+				);
+				$this->db->insert('fai_absen', $data);
+				$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+					<center><b>Data Sudah Disimpan</b></center></div>');
+			} else {
+				$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+					<center><b>Data Sudah Ada</b></center></div>');
+			}
+			$this->db->trans_complete();
+		} catch (\Throwable $e) {
+			$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+					<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
+		}
+		redirect('Absen/tertunda');
+	}
+
 	public function masuk()
 	{
 		//if (($this->uri->segment(3) == $_SESSION['id_akun'])) {
-		if (($this->uri->segment(3) == $_SESSION['id_akun']) and (date('H') >= 6 AND date('H') <= 12)) {
+		if (($this->uri->segment(3) == $_SESSION['id_akun']) and (date('H') >= 6 and date('H') <= 12)) {
 			try {
 				$this->db->trans_start();
 				$absen_masuk = date('H:i');
@@ -69,7 +109,7 @@ class Absen extends CI_Controller
 				}
 				$this->db->trans_complete();
 				$status = 200;
-			} catch (\Throwable $th) {
+			} catch (\Throwable $e) {
 				$status = 400;
 				$msg = 'Caught exception: ' .  $e->getMessage();
 			}
@@ -89,7 +129,7 @@ class Absen extends CI_Controller
 	public function pulang()
 	{
 		//if (($this->uri->segment(3) == $_SESSION['id_akun'])) {
-		if (($this->uri->segment(3) == $_SESSION['id_akun']) and (date('H') >= 14 AND date('H') <= 21)) {
+		if (($this->uri->segment(3) == $_SESSION['id_akun']) and (date('H') >= 14 and date('H') <= 21)) {
 			try {
 				$this->db->trans_start();
 				$absen_pulang = date('H:i');
@@ -115,7 +155,7 @@ class Absen extends CI_Controller
 				}
 				$this->db->trans_complete();
 				$jam = $absen_pulang;
-			} catch (\Throwable $th) {
+			} catch (\Throwable $e) {
 				$status = 400;
 				$msg = 'Caught exception: ' .  $e->getMessage();
 			}

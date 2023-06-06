@@ -88,7 +88,7 @@
                 .DataTable({
                     bAutoWidth: false,
                     "aoColumns": [
-                        null, null, null,null
+                        null, null, null, null
                     ],
                     "aaSorting": [],
                     select: {
@@ -97,6 +97,40 @@
                 });
 
         })
+    </script>
+<?php } ?>
+
+<?php if ($page == 'Absen_tertunda') { ?>
+    <script type="text/javascript">
+        jQuery(function($) {
+            //initiate dataTables plugin
+            var myTable =
+                $('#dynamic-table')
+                .DataTable({
+                    bAutoWidth: false,
+                    "aoColumns": [
+                        null, null, null, null, null,null
+                    ],
+                    "aaSorting": [],
+                    select: {
+                        style: 'multi'
+                    }
+                });
+
+        })
+
+        $(function() {
+            $('input[name="tgl_absen"]').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                minYear: 2022,
+                maxYear: parseInt(moment().format('YYYY'), 5),
+                locale: {
+                    format: 'YYYY-MM-DD'
+                }
+
+            });
+        });
     </script>
 <?php } ?>
 

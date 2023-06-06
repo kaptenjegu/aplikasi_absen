@@ -196,7 +196,7 @@
                             } ?>">
                     <a href="<?= base_url('Absen/tertunda') ?>">
                         <i class="menu-icon glyphicon glyphicon-tag"></i>
-                        <span class="menu-text"> Absen Tertunda </span>
+                        <span class="menu-text"> Ajukan Absen </span>
                     </a>
 
                     <b class="arrow"></b>
