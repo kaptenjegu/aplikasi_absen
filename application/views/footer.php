@@ -109,7 +109,7 @@
                 .DataTable({
                     bAutoWidth: false,
                     "aoColumns": [
-                        null, null, null, null, null,null
+                        null, null, null, null, null
                     ],
                     "aaSorting": [],
                     select: {

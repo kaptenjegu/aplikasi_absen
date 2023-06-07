@@ -7,8 +7,9 @@
                 <label><b>Pilih Jenis Absen</b></label>
                 <select class="form-control" name="pending">
                     <option value="7">Cuti</option>
-                    <option value="8">Ijin</option>
+                    <option value="8">Unpaid Leave</option>
                     <option value="9">Sakit</option>
+                    <option value="1">Lupa Absen Masuk</option>
                 </select>
             </div>
             <div class="form-group">
@@ -54,10 +55,10 @@
                             $jenis = 'Cuti';
                             $status = '<b style="color: red">pending</b>';
                         }elseif($v->pending == 5){
-                            $jenis = 'Ijin';
+                            $jenis = 'Unpaid Leave';
                             $status = '<b style="color: green">disetujui</b>';
                         }elseif($v->pending == 8){
-                            $jenis = 'Ijin';
+                            $jenis = 'Unpaid Leave';
                             $status = '<b style="color: red">pending</b>';
                         }elseif($v->pending == 6){
                             $jenis = 'Sakit';
@@ -65,6 +66,12 @@
                         }elseif($v->pending == 9){
                             $jenis = 'Sakit';
                             $status = '<b style="color: red">pending</b>';
+                        }elseif($v->pending == 1){
+                            $jenis = 'Lupa Absen';
+                            $status = '<b style="color: red">pending</b>';
+                        }elseif($v->pending == 2){
+                            $jenis = 'Lupa Absen';
+                            $status = '<b style="color: green">disetujui</b>';
                         }else{
                             $jenis = 'None';
                             $status = 'None';

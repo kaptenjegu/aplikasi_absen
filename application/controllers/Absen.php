@@ -37,8 +37,9 @@ class Absen extends CI_Controller
 		$data['page'] = 'Absen_tertunda';
 		$data['url'] = base_url('Absen/tertunda');
 
-		$this->db->where('pending >= 4');
-		$this->db->where('pending <= 9');
+		//$this->db->where('pending' , '1');
+		$this->db->where('(pending >= 4 AND pending <= 9) OR pending = 1 OR pending = 2');
+		//$this->db->where('pending <= 9');
 		$this->db->where('id_user', $_SESSION['id_akun']);
 		$data['pending'] = $this->db->get('fai_absen')->result();
 
@@ -56,12 +57,19 @@ class Absen extends CI_Controller
 			$keterangan = $this->input->post('keterangan');
 			$id_user = $_SESSION['id_akun'];
 			$n = $this->cek_dobel_data($id_user, $tgl_absen, 'masuk');
+
+			if ($pending == 1) {
+				$absen_masuk = '07:59';
+			}else{
+				$absen_masuk = '';
+			}
+
 			if ($n == 0) {
 				$data = array(
 					'id_absen' => randid(),
 					'id_user' => $id_user,
 					'tgl_absen' => $tgl_absen,
-					'absen_masuk' 	=> '',
+					'absen_masuk' 	=> $absen_masuk,
 					'absen_pulang' 	=> '',
 					'pending' 	=> $pending,
 					'catatan_pending' 	=> $keterangan
