@@ -1,15 +1,26 @@
-<div class="alert alert-block alert-success">
-    <p>
-        <strong>
-            <i class="ace-icon fa fa-bullhorn"></i>
-            Judul Pengumuman
-        </strong>
-    </p>
+<?php
+foreach ($notif as $v) {
 
-    <p>
-        <a href="#" onclick="show_modal()" class="btn btn-sm">Lihat</a>
-    </p>
-</div>
+    if ($v->mode_notif == 1) {
+        $alert_tipe = 'danger';
+    } else {
+        $alert_tipe = 'success';
+    }
+
+    echo '<div class="alert alert-block alert-' . $alert_tipe . '">
+        <p>
+            <strong>
+                <i class="ace-icon fa fa-bullhorn"></i>
+                ' . $v->isi_notif . '
+            </strong>
+        </p>
+
+        <p>
+           Alasan : <b>' . $v->alasan . '</b>
+        </p>
+    </div>';
+}
+?>
 
 <!-- MODAL -->
 <div id="m-pengumuman" class="modal fade in" tabindex="-1" style="margin-top: 10%;">

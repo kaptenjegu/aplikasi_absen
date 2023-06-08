@@ -23,254 +23,28 @@ function randid()
 	return $id;
 }
 
-function riwayat($id_request, $status, $deadline)
+function get_notif()
 {
 	date_default_timezone_set('Asia/Jakarta');
 	$ci = get_instance();
-	$id_riwayat = randid();
 
-	$ci->db->where('id_request', $id_request);
-	$ci->db->where('id_status', $status);
-	$n = $ci->db->get('riwayat_request')->num_rows();
+	$ci->db->where('id_user', $_SESSION['id_akun']);
+	$ci->db->where('status_baca', 0);
+	$ci->db->order_by('tgl_add', 'desc');
+	$ci->db->limit(30);
+	$notif = $ci->db->get('fai_notif');
 
-	if ($n) {
-		$ci->db->set('deadline', $deadline);
-		$ci->db->where('id_request', $id_request);
-		$ci->db->where('id_status', $status);
-		$ci->db->update('riwayat_request');
+	return $notif;
+}
+
+function detection()
+{
+	$device = "";
+	$useragent = $_SERVER["HTTP_USER_AGENT"];
+	if (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i', $useragent) || preg_match('/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i', substr($useragent, 0, 4))) {
+		$device = "Mobile";
 	} else {
-		$data = array(
-			'id_riwayat' => $id_riwayat,
-			'id_request' => $id_request,
-			'id_user' 	=> $_SESSION['id_user'],
-			'deadline' 	=> $deadline,
-			'id_status' => $status
-		);
-		$ci->db->insert('riwayat_request', $data);
-
-		$data = array(
-			'id_notif' => randid(),
-			'id_riwayat' => $id_riwayat
-		);
-		$ci->db->insert('notif', $data);
+		$device = "PC/Laptop";
+		echo 'Mohon Maaf, website ini hanya bisa diakses dari Smartphone';exit();
 	}
-}
-
-function riwayat2($id_request, $status)
-{
-	date_default_timezone_set('Asia/Jakarta');
-	$ci = get_instance();
-	/*$id_riwayat = randid();
-	
-	$ci->db->where('id_request', $id_request);
-	$ci->db->where('id_status', $status);
-	$n = $ci->db->get('riwayat_request')->num_rows();
-	
-	if($n){*/
-	$ci->db->set('created_at', date('Y-m-d H-i-s'));
-	$ci->db->where('id_request', $id_request);
-	$ci->db->where('id_status', $status);
-	$ci->db->update('riwayat_request');
-	/*}else{
-		$data = array(
-			'id_riwayat' => $id_riwayat,
-			'id_request' => $id_request,
-			'id_user' 	=> $_SESSION['id_user'],
-			//'deadline' 	=> '',
-			'created_at' 	=> date('Y-m-d H-i-s'),
-			'id_status' => $status
-		);
-		$ci->db->insert('riwayat_request', $data);
-		
-		$data = array(
-			'id_notif' => randid(),
-			'id_riwayat' => $id_riwayat
-		);
-		$ci->db->insert('notif', $data);
-	}*/
-}
-
-function periksa($id_request)
-{	//konversi status kesudah periksa atau belum
-	$ci = get_instance();
-
-	$ci->db->where('id_request', $id_request);
-	$ci->db->where('role', $_SESSION['role']);
-	$ci->db->group_by('role');
-	$p = $ci->db->get('pemeriksaan')->num_rows();
-
-	if ($p > 0) {
-		$status = 'Sudah diperiksa';
-	} else {
-		$status = 'Belum diperiksa';
-	}
-
-	return $status;
-}
-
-function sub_kategori($id)
-{
-	$ci = get_instance();
-	$ci->db->where('id_sub_kategori', $id);
-	$data = $ci->db->get('sub_kategori')->first_row();
-	return $data->nama_sub_kategori;
-}
-
-function usulan()
-{
-	$id = $_SESSION['role'];
-	$ci = get_instance();
-
-	$ci->db->select('*');
-	$ci->db->from('barang_request');
-	$ci->db->join('status_pengadaan', 'status_pengadaan.id_status=barang_request.id_status');
-	$ci->db->join('jenis', 'jenis.id_jenis=barang_request.id_jenis');
-	$ci->db->join('kategori', 'kategori.id_kategori=barang_request.id_kategori');
-
-	if ($id == 1 and $_SESSION['id_kantor'] == 1) { //GM PJBS	
-		$ci->db->where('barang_request.id_status = 11');
-	} elseif ($id == 1 and $_SESSION['id_kantor'] == 2) {	//GM BPI/EVP
-		$ci->db->where('barang_request.id_status = 12 OR barang_request.id_status = 24 OR barang_request.id_status = 27 OR barang_request.id_status = 44 OR barang_request.id_status = 47 OR barang_request.id_status = 49');
-	} elseif ($id == 2) { //mgr umum
-		$ci->db->where('barang_request.id_kategori = 2');
-		$ci->db->where('barang_request.id_status = 15 OR barang_request.id_status = 48');
-	} elseif ($id == 5) { //mgr om
-		$ci->db->where('barang_request.id_kategori = 1');
-		$ci->db->where('barang_request.id_status = 15 OR barang_request.id_status = 17 OR barang_request.id_status = 45');
-	} elseif ($id == 6) { //staff om
-		$ci->db->where('barang_request.id_status = 16 OR barang_request.id_status = 42 OR barang_request.id_status = 36');
-	} elseif ($id == 3 and $_SESSION['id_kantor'] == 2) {	//staff BPI - umum
-		$ci->db->where('barang_request.id_status = 21 OR barang_request.id_status = 39');
-	} elseif ($id == 8) {	//staff Pengadaan - y/t
-		$ci->db->where('barang_request.id_status = 18 OR barang_request.id_status = 38');
-	} elseif ($id == 4 and $_SESSION['id_kantor'] == 2) {	//staff Pemeriksaan - Gudang
-		$ci->db->where('barang_request.id_status = 30 OR barang_request.id_status = 19');
-	} elseif ($id == 7 and $_SESSION['id_kantor'] == 2) {	//staff Keu BPI
-		$ci->db->where('barang_request.id_status = 40');
-	} elseif ($id == 8 and $_SESSION['id_kantor'] == 2) {	//staff Pengadaan BPI
-		$ci->db->where('barang_request.id_status = 18');
-	} else {
-		$ci->db->where('barang_request.id_status = 0');
-	}
-
-	$ci->db->where('barang_request.aktif', 1);
-	$ci->db->order_by('created_at', 'desc');
-	$data = $ci->db->get();
-
-	$hasil['jumlah'] = $data->num_rows();
-	$hasil['data'] = $data->result();
-
-	//if($_SESSION['role']==3 AND $_SESSION['id_kantor']==1){
-	//	$n = 0;
-	//}
-	return $hasil;
-}
-
-function view_tgl($tgl)
-{
-	//$ci = get_instance();
-	$t = explode(' ', $tgl);
-	return $t[0];
-}
-
-function view_jam($tgl)
-{
-	//$ci = get_instance();
-	$t = explode(' ', $tgl);
-	return $t[1];
-}
-
-function grup_by()
-{
-	$ci = get_instance();
-	$query = $ci->db->query("SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
-}
-
-function view_riwayat($id_request, $id_status)
-{
-	$ci = get_instance();
-
-	$ci->db->where('id_request', $id_request);
-	$ci->db->where('id_status', $id_status);
-	$d = $ci->db->get('riwayat_request');
-	if ($d->num_rows()) {
-		$data = $d->first_row();
-		return $data->deadline;
-	} else {
-		return '-';
-	}
-}
-
-function hapus_alasan($id_request)
-{
-	$ci = get_instance();
-
-	$ci->db->set('alasan_ditolak', '');
-	$ci->db->where('id_request', $id_request);
-	$ci->db->update('barang_request');
-}
-
-function hapus_karantina($id_request)
-{
-	$ci = get_instance();
-
-	$ci->db->set('id_status', 36);	//Auto  = Barang/jasa telah diperiksa, sedang dibuatkan BA
-	$ci->db->set('alasan_ditolak', '');
-	$ci->db->where('id_request', $id_request);
-	$ci->db->update('barang_request');
-}
-
-function dashboard($id)
-{
-	$ci = get_instance();
-
-	if ($id == 1) {
-		$ci->db->where('id_status', 40);
-		$data = $ci->db->get('barang_request')->num_rows();
-	} elseif ($id == 2) {
-		$ci->db->where('id_status<>40');
-		$ci->db->where('id_status<>11');
-		$data = $ci->db->get('barang_request')->num_rows();
-	} elseif ($id == 3) {
-		$ci->db->where('id_status', 11);
-		$data = $ci->db->get('barang_request')->num_rows();
-	} elseif ($id == 4) {
-		$ci->db->where('aktif', 1);
-		$data = $ci->db->get('user')->num_rows();
-	} elseif ($id == 5) {
-		$data = $ci->db->get('barang_request')->num_rows();
-	} elseif ($id == 6) {
-		$ci->db->where('id_pengadaan', 2);
-		$data = $ci->db->get('barang_request')->num_rows();
-	} else {
-		$ci->db->where('id_status', 11);
-		$data = $ci->db->get('barang_request')->num_rows();
-	}
-
-	return $data;
-}
-
-function tgl_before($id_request, $id_status)
-{
-	$ci = get_instance();
-	$ci->db->where('id_request', $id_request);
-	$ci->db->where('id_status', $id_status);
-	$d = $ci->db->get('riwayat_request');
-	if ($d->num_rows()) {
-		$data = $d->first_row();
-		return $data->created_at;
-	} else {
-		return '-';
-	}
-}
-
-function notif_pjbs($id, $opsi)
-{
-	$ci = get_instance();
-	$data = array(
-		'id_notif' => '',
-		'id_request' => $id,
-		'id_status' => $opsi	//1 - disetujui , 2 - ditolak
-	);
-	$ci->db->insert('notif_pjbs', $data);
 }

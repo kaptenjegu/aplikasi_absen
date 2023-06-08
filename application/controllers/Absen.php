@@ -8,6 +8,7 @@ class Absen extends CI_Controller
 		parent::__construct();
 		date_default_timezone_set('Asia/Jakarta');
 		cek_login();
+		detection();
 	}
 
 	public function index()

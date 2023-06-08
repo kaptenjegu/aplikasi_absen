@@ -7,17 +7,20 @@ class Pengumuman extends CI_Controller
 	{
 		parent::__construct();
 		date_default_timezone_set('Asia/Jakarta');
+		detection();
 		cek_login();
 	}
 
 	public function index()
 	{		
-		$data['judul'] = 'Pengumuman';
+		$data['judul'] = 'Notifikasi';
 		$data['page'] = 'Pengumuman';
 		$data['url'] = base_url('Pengumuman');
 
+		$data['notif'] = get_notif()->result();
+
 		$this->load->view('header', $data);
-		$this->load->view('absen_tertunda', $data);
+		$this->load->view('pengumuman', $data);
 		$this->load->view('footer');
 	}
 }

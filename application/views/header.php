@@ -107,9 +107,15 @@
                     <!-- pengumuman header -->
                     <li class="grey dropdown-modal">
                         <a class="dropdown-toggle" href="<?= base_url('Pengumuman') ?>">
-                            <i class="ace-icon fa fa-bullhorn"></i>
-                            <!--i class="ace-icon fa fa-bullhorn icon-animated-vertical"></i-->
-                            <!--span class="badge badge-warning">5</span-->
+                            <?php
+                            $n_notif = get_notif()->num_rows();
+                            if($n_notif > 0){
+                                echo '<i class="ace-icon fa fa-bullhorn icon-animated-vertical"></i>';
+                                echo '<span class="badge badge-warning">' . $n_notif . '</span>';
+                            }else{
+                                echo '<i class="ace-icon fa fa-bullhorn"></i>';
+                            }
+                            ?>
                         </a>
                     </li>
                     <!-- pengumuman header -->
@@ -208,8 +214,14 @@
                     <a href="<?= base_url('Pengumuman') ?>">
                         <i class="menu-icon fa fa-bullhorn"></i>
                         <span class="menu-text">
-                            Pengumuman
-                            <!--span class="badge badge-warning">8</span-->
+                            Notifikasi
+                            <?php
+                            $n_notif = get_notif()->num_rows();
+                            if($n_notif > 0){
+                                echo '<span class="badge badge-warning">' . $n_notif . '</span>';
+                            }
+                            ?>
+                            
                         </span>
                     </a>
 
