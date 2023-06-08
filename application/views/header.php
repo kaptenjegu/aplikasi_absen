@@ -17,9 +17,9 @@
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/ace-skins.min.css" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/ace-rtl.min.css" />
-    <link rel="stylesheet" href="<?= base_url() ?>assets/css/leaflet.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="<?= base_url() ?>assets/js/ace-extra.min.js"></script>
+    
     <style>
         .blink_me {
             animation: blinker 1s linear infinite;

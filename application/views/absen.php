@@ -91,6 +91,7 @@
 <div id="map" style="width:100%; height:380px;"></div>
 
 <br><br>
+
 <button class="btn btn-success col-xs-12" onclick="getLocation()">
     <i class="glyphicon glyphicon-refresh"></i> Refresh Map
 </button>

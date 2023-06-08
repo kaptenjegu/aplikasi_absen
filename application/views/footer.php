@@ -174,6 +174,7 @@
 
             var dist = distance(lat, long);
             var jarak = (dist * 300) / 1000;
+            var kurang = 0.003;
 
             document.getElementById("lat").value = lat;
             document.getElementById("long").value = long;
@@ -185,26 +186,21 @@
             //x.innerHTML = "Latitude: " + lat +
             //    "<br>Longitude: " + long + 
             //    "<br>Jarak ke kantor: " + jarak.toFixed(2) + " KM";
-
+            document.getElementById("map").innerHTML = '<iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=' + (long - kurang) + '%2C' + (lat - kurang) + '%2C' + (long + kurang) + '%2C' + (lat + kurang) + '&amp;layer=mapnik&amp;marker=' + lat + '%2C' + long + '" style="border: 1px solid black"></iframe>';
             // Creating map options
-            var mapOptions = {
+            /*var mapOptions = {
                 center: [lat, long],
                 zoom: 17
             }
-            // Creating a map object
             var map = new L.map('map', mapOptions);
 
-            // Creating a Layer object
             var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 
-            // Adding layer to the map
             map.addLayer(layer);
 
-            // Creating a marker
             var marker = L.marker([lat, long]);
 
-            // Adding marker to the map
-            marker.addTo(map);
+            marker.addTo(map);*/
         }
 
         function distance(lat, long) {
