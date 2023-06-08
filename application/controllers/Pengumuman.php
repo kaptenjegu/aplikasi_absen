@@ -18,9 +18,18 @@ class Pengumuman extends CI_Controller
 		$data['url'] = base_url('Pengumuman');
 
 		$data['notif'] = get_notif()->result();
+		$this->clear_notif();
 
 		$this->load->view('header', $data);
 		$this->load->view('pengumuman', $data);
 		$this->load->view('footer');
 	}
+
+	private function clear_notif()
+	{
+		$this->db->set('status_baca', 1);
+		$this->db->where('id_user', $_SESSION['id_akun']);
+		$this->db->update('fai_notif');
+	}
+
 }
