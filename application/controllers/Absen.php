@@ -328,6 +328,18 @@ class Absen extends CI_Controller
 		return $cuti;
 	}
 
+	private function kurangi_cuti()
+	{
+		$this->db->where('id_user', $_SESSION['id_akun']);
+		$user = $this->db->get('fai_akun')->first_row();
+
+		if ($user->sisa_cuti > 0) {
+		} else {
+		}
+
+		return $cuti;
+	}
+
 	//Fitur absen cuti, sakit, ijin, dll
 	public function tertunda()
 	{
@@ -365,18 +377,34 @@ class Absen extends CI_Controller
 			}
 
 			if ($n == 0) {
-				$data = array(
-					'id_absen' => randid(),
-					'id_user' => $id_user,
-					'tgl_absen' => $tgl_absen,
-					'absen_masuk' 	=> $absen_masuk,
-					'absen_pulang' 	=> '',
-					'pending' 	=> $pending,
-					'catatan_pending' 	=> $keterangan
-				);
-				$this->db->insert('fai_absen', $data);
-				$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+				$this->db->where('id_akun', $_SESSION['id_akun']);
+				$user = $this->db->get('fai_akun')->first_row();
+				$sisa_cuti = $user->sisa_cuti;
+
+				if ($sisa_cuti > 0) {	//cek sisa cuti
+					$data = array(
+						'id_absen' => randid(),
+						'id_user' => $id_user,
+						'tgl_absen' => $tgl_absen,
+						'absen_masuk' 	=> $absen_masuk,
+						'absen_pulang' 	=> '',
+						'pending' 	=> $pending,
+						'catatan_pending' 	=> $keterangan
+					);
+					$this->db->insert('fai_absen', $data);
+
+					$this->db->set('sisa_cuti', $sisa_cuti - 1);
+					$this->db->where('id_akun', $_SESSION['id_akun']);
+					$this->db->update('fai_akun');
+
+					$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
 					<center><b>Data Sudah Disimpan</b></center></div>');
+				} else {
+					$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+					<center><b>Jatah Cuti telah habis</b></center></div>');
+				}
+
+				
 			} else {
 				$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
 					<center><b>Data Sudah Ada</b></center></div>');

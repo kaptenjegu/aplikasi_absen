@@ -53,6 +53,7 @@
         </div>
 
         <br><br>
-        <button type="submit" class="btn btn-info"><i class="fa fa-print"></i> Cetak</button>
+        <button type="submit" class="btn btn-info"><i class="fa fa-print"></i> Cetak</button>&emsp;
+        <a href="<?= base_url('Absen/tertunda/') ?>" class="btn btn-default">Kembali</a>
     </form>
 </div>
