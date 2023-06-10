@@ -126,7 +126,8 @@
                             <img class="nav-user-photo" src="<?= base_url() ?>assets/images/avatars/avatar2.png" alt="Jason's Photo" />
                             <span class="user-info">
                                 <small>Welcome,</small>
-                                <?= $_SESSION['nama_user'] ?>
+                                <?//= $_SESSION['nama_user'] ?>
+                                User
                             </span>
 
                             <i class="ace-icon fa fa-caret-down"></i>
@@ -197,7 +198,7 @@
                     <b class="arrow"></b>
                 </li>
 
-                <li class="<?php if ($page == 'Absen_tertunda') {
+                <li class="<?php if ($page == 'Absen_tertunda' OR $page == 'Absen_tertunda2') {
                                 echo "active";
                             } ?>">
                     <a href="<?= base_url('Absen/tertunda') ?>">

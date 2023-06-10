@@ -31,12 +31,311 @@ class Absen extends CI_Controller
 		echo date('H') . '<span class="blink_me">:</span>' . date('i');
 	}
 
+	public function form_cuti()
+	{
+		$data['n_cuti'] = $this->cek_cuti();
+		if ($data['n_cuti'] > 0) {
+			$data['judul'] = 'Form Cuti';
+			$data['page'] = 'Absen_tertunda2';
+			$data['url'] = base_url('Absen/form_cuti');
+
+			$this->db->select('*');
+			$this->db->from('fai_akun');
+			$this->db->join('fai_jabatan', 'fai_jabatan.id_jabatan = fai_akun.id_jabatan');
+			$this->db->where('fai_akun.id_akun', $_SESSION['id_akun']);
+			$data['user'] = $this->db->get()->first_row();
+
+			$this->db->where('id_akun<>', $_SESSION['id_akun']);
+			$this->db->where('tgl_delete', null);
+			$data['user_tj'] = $this->db->get('fai_akun')->result();
+
+			$this->db->where('id_akun<>', $_SESSION['id_akun']);
+			$this->db->where('role_pegawai', 2);
+			$this->db->where('tgl_delete', null);
+			$data['user_atasan'] = $this->db->get('fai_akun')->result();
+
+			$this->load->view('header', $data);
+			$this->load->view('form_cuti', $data);
+			$this->load->view('footer');
+		} else {
+			$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+					<center><b>Data Tidak Cocok</b></center></div>');
+			redirect('Absen/tertunda');
+		}
+	}
+
+	public function cetak_form_cuti()
+	{
+		$id_user = $_GET['id_user'];
+		$id_user_tj = $_GET['id_user_tj'];
+		$id_user_atasan = $_GET['id_user_atasan'];
+		$tgl_masuk = $this->konversi_tgl(date('d/m/Y', strtotime($_GET['tgl_masuk'])));
+		$keterangan = $_GET['keterangan'];
+		$nama_user = $_GET['nama_user'];
+
+		if ($this->cek_cuti() > 0) {
+
+			$this->db->where('id_akun', $this->db->escape_str($id_user));
+			$user = $this->db->get('fai_akun')->first_row();
+
+			$this->db->where('pending', 4);
+			$this->db->where('id_user', $this->db->escape_str($id_user));
+			$this->db->order_by('tgl_absen', 'desc');
+			$cuti_akhir = $this->db->get('fai_absen');
+
+			$this->db->where('pending', 7);
+			$this->db->where('id_user', $this->db->escape_str($id_user));
+			$this->db->order_by('tgl_absen', 'asc');
+			$list_cuti = $this->db->get('fai_absen')->result();
+			//echo json_encode($list_cuti);exit();
+
+			if ($cuti_akhir->num_rows() > 0) {
+				$tgl_cuti_a = $cuti_akhir->first_row();
+				$tgl_cuti_akhir = date('d-m-Y', strtotime($tgl_cuti_a->tgl_absen));
+			} else {
+				$tgl_cuti_akhir = '-';
+				//$list_cuti = [];
+			}
+
+			if ($id_user_tj == "0") {
+				$user_tj = '-';
+				$no_tj = '-';
+			} else {
+				$this->db->where('id_akun', $this->db->escape_str($id_user_tj));
+				$tj = $this->db->get('fai_akun')->first_row();
+				$user_tj = $tj->nama_user;
+				$no_tj = $tj->no_telp;
+			}
+
+			$pdf = new PDF_MC_Table('P', 'mm', 'a4'); // h ,w
+			$pdf->AliasNbPages();
+			$brd = 0;
+			$brd2 = 1;
+
+			$pdf->SetFont('Times', 'B', 12);
+			$pdf->AddPage();
+
+			$pdf->Image(base_url() . 'assets/images/logo_falcon.png', 15, 15, -300);
+			//$pdf->Cell(190,5,'',$brd,1,'R');//(w,h,txt,border,ln,align)
+			$pdf->Cell(190, 5, 'PT Falcon Prima Tehnik', $brd, 1, 'R'); //(w,h,txt,border,ln,align)
+			$pdf->SetFont('Times', 'B', 8);
+			$pdf->Cell(190, 3, 'Telp. 031-59178698', $brd, 1, 'R');
+			$pdf->Cell(190, 3, 'E-mail. falcon@falcontehnik.com', $brd, 1, 'R');
+			$pdf->Cell(190, 3, 'falcon.tehnik@gmail.com', $brd, 1, 'R');
+			$pdf->Cell(190, 3, 'Website. https://falcontehnik.com', $brd, 1, 'R');
+			$pdf->Cell(190, 3, 'Jl Klampis Semolo Barat X.71 / L.38 Sukolilo, Surabaya, Jawa Timur 60116', $brd, 1, 'R');
+			$pdf->Cell(190, 5, '', $brd, 1, 'R');
+			$pdf->Cell(190, 5, '', $brd, 1, 'R');
+			$pdf->Cell(190, 5, '', $brd, 1, 'R');
+			$pdf->SetLineWidth(1);
+			$pdf->SetDrawColor(255, 0, 0);
+			$pdf->Line(10, 35, 200, 35);	//Line(float x1, float y1, float x2, float y2)
+
+			$pdf->SetLineWidth(0);
+			$pdf->SetDrawColor(0, 0, 0);
+			$pdf->SetFillColor(210, 221, 242);
+			$pdf->SetFont('Times', 'B', 12);
+			$pdf->Cell(190, 10, 'FORM CUTI', $brd, 1, 'C');
+			$pdf->Cell(190, 5, '', $brd, 1, 'C');
+
+			$pdf->Cell(20, 5, '', $brd, 0, 'R');
+			$pdf->Cell(60, 5, 'Nama', $brd, 0, 'L');
+			$pdf->Cell(5, 5, ':', $brd, 0, 'C');
+			$pdf->Cell(105, 5, $nama_user, $brd, 1, 'L');
+
+			$pdf->Cell(20, 5, '', $brd, 0, 'R');
+			$pdf->Cell(60, 5, 'Jabatan', $brd, 0, 'L');
+			$pdf->Cell(5, 5, ':', $brd, 0, 'C');
+			$pdf->Cell(105, 5, $_GET['jabatan'], $brd, 1, 'L');
+
+			$pdf->Cell(20, 5, '', $brd, 0, 'R');
+			$pdf->Cell(60, 5, 'Telp yang bisa dihubungi', $brd, 0, 'L');
+			$pdf->Cell(5, 5, ':', $brd, 0, 'C');
+			$pdf->Cell(105, 5, $_GET['no_telp'], $brd, 1, 'L');
+
+			$pdf->Cell(20, 5, '', $brd, 0, 'R');
+			$pdf->Cell(60, 5, 'Total Pengambilan Cuti', $brd, 0, 'L');
+			$pdf->Cell(5, 5, ':', $brd, 0, 'C');
+			$pdf->Cell(105, 5, $_GET['total_cuti'] . ' hari', $brd, 1, 'L');
+
+			$pdf->Cell(20, 5, '', $brd, 0, 'R');
+			$pdf->Cell(60, 5, 'Tanggal Masuk', $brd, 0, 'L');
+			$pdf->Cell(5, 5, ':', $brd, 0, 'C');
+			$pdf->Cell(105, 5, $tgl_masuk, $brd, 1, 'L');
+
+			$pdf->Cell(20, 5, '', $brd, 0, 'R');
+			$pdf->Cell(60, 5, 'Keperluan Cuti', $brd, 0, 'L');
+			$pdf->Cell(5, 5, ':', $brd, 0, 'C');
+			$pdf->Cell(105, 5, $keterangan, $brd, 1, 'L');
+
+			$pdf->Cell(190, 5, '', $brd, 1, 'C');
+
+			$pdf->Cell(20, 5, '', $brd, 0, 'R');
+			$pdf->Cell(170, 5, 'Tugas dan Tanggung Jawab diserahkan kepada :', $brd, 1, 'L');
+
+			$pdf->Cell(20, 5, '', $brd, 0, 'R');
+			$pdf->Cell(60, 5, 'Nama', $brd, 0, 'L');
+			$pdf->Cell(5, 5, ':', $brd, 0, 'C');
+			$pdf->Cell(105, 5, $user_tj, $brd, 1, 'L');
+
+			$pdf->Cell(20, 5, '', $brd, 0, 'R');
+			$pdf->Cell(60, 5, 'Telp yang bisa dihubungi', $brd, 0, 'L');
+			$pdf->Cell(5, 5, ':', $brd, 0, 'C');
+			$pdf->Cell(105, 5, $no_tj, $brd, 1, 'L');
+
+			$pdf->Cell(190, 5, '', $brd, 1, 'R');
+
+			$pdf->Cell(20, 5, '', $brd, 0, 'R');
+			$pdf->Cell(60, 5, 'Terakhir kali cuti', $brd, 0, 'L');
+			$pdf->Cell(5, 5, ':', $brd, 0, 'C');
+			$pdf->Cell(105, 5, $tgl_cuti_akhir, $brd, 1, 'L');
+
+			$pdf->Cell(20, 5, '', $brd, 0, 'R');
+			$pdf->Cell(60, 5, 'Pengambilan cuti tahun 2023', $brd, 0, 'L');
+			$pdf->Cell(5, 5, ':', $brd, 0, 'C');
+			$pdf->Cell(105, 5, 12 - $user->sisa_cuti, $brd, 1, 'L');
+
+			$pdf->Cell(20, 5, '', $brd, 0, 'R');
+			$pdf->Cell(60, 5, 'Sisa cuti tahun 2023', $brd, 0, 'L');
+			$pdf->Cell(5, 5, ':', $brd, 0, 'C');
+			$pdf->Cell(105, 5, $user->sisa_cuti, $brd, 1, 'L');
+
+			$pdf->Cell(190, 5, '', $brd, 1, 'R');
+
+			//tabel list tgl cuti
+			$no_c = 1;
+			foreach ($list_cuti as $c) {
+				if ($no_c == 1) {
+					$pdf->Cell(20, 5, '', $brd, 0, 'R');
+					$pdf->Cell(60, 5, 'Tanggal Cuti', $brd, 0, 'L');
+					$pdf->Cell(5, 5, ':', $brd, 0, 'C');
+					$pdf->Cell(105, 5, $this->konversi_tgl(date('d/m/Y', strtotime($c->tgl_absen))), $brd, 1, 'L');
+				} else {
+					$pdf->Cell(20, 5, '', $brd, 0, 'R');
+					$pdf->Cell(60, 5, '', $brd, 0, 'L');
+					$pdf->Cell(5, 5, '', $brd, 0, 'C');
+					$pdf->Cell(105, 5, $this->konversi_tgl(date('d/m/Y', strtotime($c->tgl_absen))), $brd, 1, 'L');
+				}
+				$no_c += 1;
+			}
+
+
+
+			$pdf->Cell(190, 5, '', $brd, 1, 'R');
+			$pdf->Cell(190, 5, '', $brd, 1, 'R');
+
+			$pdf->Cell(20, 5, '', $brd, 0, 'R');
+			$pdf->Cell(170, 5, 'Surabaya, ' . $this->konversi_tgl(date('d/m/Y')), $brd, 1, 'L');
+
+			$pdf->Cell(20, 5, '', $brd, 0, 'R');
+			$pdf->Cell(56.6, 5, 'Pemohon', $brd2, 0, 'C');
+			$pdf->Cell(56.6, 5, 'Penerima Tanggung Jawab', $brd2, 0, 'C');
+			$pdf->Cell(56.6, 5, '', $brd, 1, 'C');
+
+			$pdf->Cell(20, 35, '', $brd, 0, 'R');
+			$pdf->Cell(56.6, 35, '', $brd2, 0, 'R');
+			$pdf->Cell(56.6, 35, '', $brd2, 0, 'R');
+			$pdf->Cell(56.6, 35, '', $brd, 1, 'R');
+
+			$pdf->Cell(20, 5, '', $brd, 0, 'R');
+			$pdf->Cell(56.6, 5, $nama_user, $brd2, 0, 'C');
+			$pdf->Cell(56.6, 5, $user_tj, $brd2, 0, 'C');
+			$pdf->Cell(56.6, 5, '', $brd, 1, 'C');
+
+			$pdf->Cell(190, 5, '', $brd, 1, 'R');
+
+			$pdf->Cell(20, 5, '', $brd, 0, 'R');
+			$pdf->Cell(56.6, 5, 'HRD & SDM', $brd2, 0, 'C');
+			$pdf->Cell(56.6, 5, 'Atasan Langsung', $brd2, 0, 'C');
+			$pdf->Cell(56.6, 5, 'Direktur Utama', $brd2, 1, 'C');
+
+			$pdf->Cell(20, 35, '', $brd, 0, 'R');
+			$pdf->Cell(56.6, 35, '', $brd2, 0, 'C');
+			$pdf->Cell(56.6, 35, '', $brd2, 0, 'C');
+			$pdf->Cell(56.6, 35, '', $brd2, 1, 'C');
+
+			$pdf->Cell(20, 5, '', $brd, 0, 'R');
+			$pdf->Cell(56.6, 5, 'Kurnia Dwi Aprilina', $brd2, 0, 'C');
+			$pdf->Cell(56.6, 5, $id_user_atasan, $brd2, 0, 'C');
+			$pdf->Cell(56.6, 5, 'M. Riz Attanto', $brd2, 1, 'C');
+
+			$pdf->SetFont('Times', '', 14);
+
+
+			$pdf->SetLineWidth(0);
+			$pdf->SetWidths(array(10, 130, 50));
+			//$pdf->Row(array('No','Status','Tanggal dibuat'));
+
+			//---------------
+			$pdf->Output('D', 'Form Cuti - ' . $nama_user . '.pdf');
+		} else {
+			echo '<b>Error!!!!</b>';
+		}
+	}
+
+	private function konversi_tgl($tgl)
+	{
+		$tgl = explode('/', $tgl);
+		switch (intval($tgl[1])) {
+			case 1:
+				$bln = 'Januari';
+				break;
+			case 2:
+				$bln = 'Februari';
+				break;
+			case 3:
+				$bln = 'Maret';
+				break;
+			case 4:
+				$bln = 'April';
+				break;
+			case 5:
+				$bln = 'Mei';
+				break;
+			case 6:
+				$bln = 'Juni';
+				break;
+			case 7:
+				$bln = 'Juli';
+				break;
+			case 8:
+				$bln = 'Agustus';
+				break;
+			case 9:
+				$bln = 'September';
+				break;
+			case 10:
+				$bln = 'Oktober';
+				break;
+			case 11:
+				$bln = 'November';
+				break;
+			case 12:
+				$bln = 'Desember';
+				break;
+			default:
+				$bln = 'Kosong';
+				break;
+		}
+		return $tgl[0] . ' ' . $bln . ' ' . $tgl[2];
+	}
+
+	private function cek_cuti()
+	{
+		$this->db->where('id_user', $_SESSION['id_akun']);
+		$this->db->where('pending', 7);
+		$cuti = $this->db->get('fai_absen')->num_rows();
+		return $cuti;
+	}
+
 	//Fitur absen cuti, sakit, ijin, dll
 	public function tertunda()
 	{
 		$data['judul'] = 'Ajukan Absen';
 		$data['page'] = 'Absen_tertunda';
 		$data['url'] = base_url('Absen/tertunda');
+
+		$data['cuti'] = $this->cek_cuti();
 
 		//$this->db->where('pending' , '1');
 		$this->db->where('(pending >= 4 AND pending <= 9) OR pending = 1 OR pending = 2');
@@ -61,7 +360,7 @@ class Absen extends CI_Controller
 
 			if ($pending == 1) {
 				$absen_masuk = '07:59';
-			}else{
+			} else {
 				$absen_masuk = '';
 			}
 

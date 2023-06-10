@@ -45,6 +45,6 @@ function detection()
 		$device = "Mobile";
 	} else {
 		$device = "PC/Laptop";
-		echo 'Mohon Maaf, website ini hanya bisa diakses dari Smartphone';exit();
+		//echo 'Mohon Maaf, website ini hanya bisa diakses dari Smartphone';exit();
 	}
 }

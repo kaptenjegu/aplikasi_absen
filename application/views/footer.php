@@ -134,6 +134,23 @@
     </script>
 <?php } ?>
 
+<?php if ($page == 'Absen_tertunda2') { ?>
+    <script type="text/javascript">
+        $(function() {
+            $('input[name="tgl_masuk"]').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                minYear: 2022,
+                maxYear: parseInt(moment().format('YYYY'), 5),
+                locale: {
+                    format: 'YYYY-MM-DD'
+                }
+
+            });
+        });
+    </script>
+<?php } ?>
+
 <?php if ($page == 'Absen') { ?>
     <!-- Custom script -->
     <script type="text/javascript">

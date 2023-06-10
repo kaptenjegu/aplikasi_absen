@@ -88,6 +88,10 @@
 
                 </tbody>
             </table>
+            <br>
+            <?php if($cuti > 0){ ?>
+                <a href="<?= base_url('Absen/form_cuti/') ?>" class="btn btn-purple" style="border-radius: 5px;">Form Cuti</a>
+            <?php } ?>
         </div>
     </div>
 </div>
