@@ -34,8 +34,11 @@ class Login extends CI_Controller
             $_SESSION['role_user'] = $data->role_user;
             $_SESSION['kunci'] = 'Login@Absen';
 
+            logdb($_SESSION['id_akun'], 'Login', 'cek_akun', 'fai_akun', 'berhasil login');
+
             redirect('Absen');
         } else {
+            logdb($email, 'Login', 'cek_akun', 'fai_akun', 'gagal login');
             $this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
 					<center><b>!!! Akun belum terdaftar !!!</b></center></div>');
             redirect('Login');
@@ -44,6 +47,7 @@ class Login extends CI_Controller
 
     public function keluar()
     {
+        logdb($_SESSION['id_akun'], 'Login', 'keluar', '', 'logout');
         session_destroy();
         $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
 					<center><b>User Logout</b></center></div>');

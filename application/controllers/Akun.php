@@ -37,11 +37,15 @@ class Akun extends CI_Controller
 			$this->db->set('password', md5($this->input->post['password']));
 			$this->db->where('id_akun', $this->input->post['id_user']);
 			$this->db->update('fai_akun');
+
+			logdb($_SESSION['id_akun'], 'Akun', 'simpan', 'fai_akun', 'update data user');
+
 			$this->db->trans_complete();
 			$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
 					<center><b>Data User telah diupdate</b></center></div>');
-		} catch (\Throwable $th) {
+		} catch (\Throwable $e) {
 			//throw $th;
+			logdb($_SESSION['id_akun'], 'Akun', 'simpan', 'fai_akun', 'gagal update data user - ' .  $e->getMessage() );
 			$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
 					<center><b>Caught exception: ' .  $e->getMessage() .'</b></center></div>');
 		}

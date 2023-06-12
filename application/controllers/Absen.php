@@ -402,13 +402,12 @@ class Absen extends CI_Controller
 				} else {
 					$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
 					<center><b>Jatah Cuti telah habis</b></center></div>');
-				}
-
-				
+				}				
 			} else {
 				$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
 					<center><b>Data Sudah Ada</b></center></div>');
 			}
+			logdb($_SESSION['id_akun'], 'Absen', 'simpan tertunda', 'fai_absen || fai_akun', 'simpan data pending - ' . json_encode($data));
 			$this->db->trans_complete();
 		} catch (\Throwable $e) {
 			$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
@@ -443,13 +442,16 @@ class Absen extends CI_Controller
 				} else {
 					$msg = 'Sudah absen masuk';
 				}
+				logdb($_SESSION['id_akun'], 'Absen', 'masuk', 'fai_absen', 'simpan data masuk - ' . json_encode($data));
 				$this->db->trans_complete();
 				$status = 200;
 			} catch (\Throwable $e) {
+				logdb($_SESSION['id_akun'], 'Absen', 'masuk', 'fai_absen', 'gagal simpan data masuk - ' . json_encode($e->getMessage()));
 				$status = 400;
 				$msg = 'Caught exception: ' .  $e->getMessage();
 			}
 		} else {
+			logdb($_SESSION['id_akun'], 'Absen', 'masuk', '', 'diluar jam absen masuk');
 			$status = 500;
 			$msg = 'Diluar jam absen masuk';
 		}
@@ -489,13 +491,16 @@ class Absen extends CI_Controller
 						$msg = 'Belum absen masuk';
 					}
 				}
+				logdb($_SESSION['id_akun'], 'Absen', 'pulang', 'fai_absen', 'simpan data pulang - ');
 				$this->db->trans_complete();
 				$jam = $absen_pulang;
 			} catch (\Throwable $e) {
+				logdb($_SESSION['id_akun'], 'Absen', 'pulang', 'fai_absen', 'gagal simpan data pulang - ' . json_encode($e->getMessage()));
 				$status = 400;
 				$msg = 'Caught exception: ' .  $e->getMessage();
 			}
 		} else {
+			logdb($_SESSION['id_akun'], 'Absen', 'pulang', '', 'Diluar jam absen pulang');
 			$status = 500;
 			$msg = 'Diluar jam absen pulang';
 		}

@@ -37,6 +37,8 @@ class Riwayat extends CI_Controller
 		$data['page'] = 'Riwayat';
 		$data['url'] = base_url('Riwayat/data_rilis/?bulan=' . $bulan);
 
+		logdb($_SESSION['id_akun'], 'Riwayat', 'data_rilis', 'fai_absen', 'getdata riwayat dari range tanggal');
+
 		$this->load->view('header', $data);
 		$this->load->view('riwayat', $data);
 		$this->load->view('footer');

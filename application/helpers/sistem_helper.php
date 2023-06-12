@@ -48,3 +48,27 @@ function detection()
 		//echo 'Mohon Maaf, website ini hanya bisa diakses dari Smartphone';exit();
 	}
 }
+
+function logdb($id_user, $page, $function, $table, $txt)
+{
+	date_default_timezone_set('Asia/Jakarta');
+	$ci = get_instance();
+	$ci->db->trans_start();
+
+	$log = array(
+		'id_user' => $id_user,
+		'page' => $page,
+		'function' => $function,
+		'table' => $table,
+		'txt' => $txt,
+		'waktu' => date('d-m-Y H:i:s')
+	);
+
+	$data = array(
+		'id_log' => randid(),
+		'data_log' => json_encode($log)
+	);
+	$ci->db->insert('fai_log', $data);
+
+	$ci->db->trans_complete();
+}
