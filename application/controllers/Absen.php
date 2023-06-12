@@ -467,7 +467,7 @@ class Absen extends CI_Controller
 	public function pulang()
 	{
 		//if (($this->uri->segment(3) == $_SESSION['id_akun'])) {
-		if (($this->uri->segment(3) == $_SESSION['id_akun']) and (date('H') >= 14 and date('H') <= 21)) {
+		if (($this->uri->segment(3) == $_SESSION['id_akun']) and (((date('H') >= 12 and date('D') == 'Sat') or (date('H') >= 14 and date('D') != 'Sat')) and date('H') <= 20)) {
 			try {
 				$this->db->trans_start();
 				$absen_pulang = date('H:i');
