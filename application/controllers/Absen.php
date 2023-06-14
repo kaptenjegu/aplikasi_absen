@@ -337,7 +337,7 @@ class Absen extends CI_Controller
 
 		$data['cuti'] = $this->cek_cuti();
 
-		$this->db->where('(pending >= 4 AND pending <= 9) OR pending = 1 OR pending = 2');		
+		$this->db->where('((pending >= 4 AND pending <= 9) OR pending = 1 OR pending = 2)');		
 		$this->db->where('id_user', $_SESSION['id_akun']);
 		$this->db->order_by('tgl_absen', 'desc');
 		$data['pending'] = $this->db->get('fai_absen')->result();
