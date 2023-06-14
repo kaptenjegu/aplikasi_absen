@@ -103,11 +103,11 @@
             </div>
 
             <div class="navbar-buttons navbar-header pull-right" role="navigation">
-                <ul class="nav ace-nav">
+                <ul class="nav ace-nav" >
 
                     <!-- pengumuman header -->
-                    <li class="grey dropdown-modal">
-                        <a class="dropdown-toggle" href="<?= base_url('Pengumuman') ?>">
+                    <li class="dropdown-modal">
+                        <a class="dropdown-toggle" style="background-color: #438EB9;" href="<?= base_url('Pengumuman') ?>">
                             <?php
                             $n_notif = get_notif()->num_rows();
                             if($n_notif > 0){
@@ -122,8 +122,8 @@
                     <!-- pengumuman header -->
 
                     <!-- user header -->
-                    <li class="light-blue dropdown-modal">
-                        <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                    <li class="dropdown-modal" style="background-color: #438EB9;border-left: 1px solid #438EB9;">
+                        <a data-toggle="dropdown" href="#" class="dropdown-toggle" style="background-color: #438EB9;border-left: 1px solid #438EB9;">
                             <img class="nav-user-photo" src="<?= base_url() ?>assets/images/avatars/avatar2.png" alt="Jason's Photo" />
                             <span class="user-info">
                                 <small>Welcome,</small>

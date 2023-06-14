@@ -191,6 +191,23 @@
         }).on('show.daterangepicker', function(ev, picker) {
             picker.container.find(".calendar-table").hide();
         });
+
+        jQuery(function($) {
+            //initiate dataTables plugin
+            var myTable =
+                $('#dynamic-table')
+                .DataTable({
+                    bAutoWidth: false,
+                    "aoColumns": [
+                        null, null, null, null
+                    ],
+                    "aaSorting": [],
+                    select: {
+                        style: 'multi'
+                    }
+                });
+
+        })
     </script>
 <?php } ?>
 
