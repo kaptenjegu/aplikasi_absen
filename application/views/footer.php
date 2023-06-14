@@ -61,6 +61,7 @@
 <script src="<?= base_url() ?>assets/js/dataTables.select.min.js"></script>
 <script src="<?= base_url() ?>assets/js/moment.min.js"></script>
 <script src="<?= base_url() ?>assets/js/daterangepicker.min.js"></script>
+<script src="https://unpkg.com/jquery-datetimepicker"></script>
 <link rel="stylesheet" href="<?= base_url() ?>assets/css/daterangepicker.css" />
 
 <?php if ($page == 'Pengumuman') { ?>
@@ -147,6 +148,48 @@
                 }
 
             });
+        });
+    </script>
+<?php } ?>
+
+<?php if ($page == 'Lembur') { ?>
+    <script type="text/javascript">
+        $(function() {
+            $('input[name="tgl_lembur"]').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                minYear: 2022,
+                maxYear: parseInt(moment().format('YYYY'), 5),
+                locale: {
+                    format: 'YYYY-MM-DD'
+                }
+            });
+        });
+
+        $("#mulai_lembur").daterangepicker({
+            timePicker: true,
+            timePicker24Hour: true,
+            singleDatePicker:true,
+            timePickerIncrement: 1,
+            timePickerSeconds: false,
+            locale: {
+                format: 'HH:mm'
+            }
+        }).on('show.daterangepicker', function(ev, picker) {
+            picker.container.find(".calendar-table").hide();
+        });
+
+        $("#selesai_lembur").daterangepicker({
+            timePicker: true,
+            timePicker24Hour: true,
+            singleDatePicker:true,
+            timePickerIncrement: 1,
+            timePickerSeconds: false,
+            locale: {
+                format: 'HH:mm'
+            }
+        }).on('show.daterangepicker', function(ev, picker) {
+            picker.container.find(".calendar-table").hide();
         });
     </script>
 <?php } ?>

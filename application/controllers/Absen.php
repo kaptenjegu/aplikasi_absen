@@ -328,18 +328,6 @@ class Absen extends CI_Controller
 		return $cuti;
 	}
 
-	private function kurangi_cuti()
-	{
-		$this->db->where('id_user', $_SESSION['id_akun']);
-		$user = $this->db->get('fai_akun')->first_row();
-
-		if ($user->sisa_cuti > 0) {
-		} else {
-		}
-
-		return $cuti;
-	}
-
 	//Fitur absen cuti, sakit, ijin, dll
 	public function tertunda()
 	{
@@ -349,10 +337,9 @@ class Absen extends CI_Controller
 
 		$data['cuti'] = $this->cek_cuti();
 
-		//$this->db->where('pending' , '1');
-		$this->db->where('(pending >= 4 AND pending <= 9) OR pending = 1 OR pending = 2');
-		//$this->db->where('pending <= 9');
+		$this->db->where('(pending >= 4 AND pending <= 9) OR pending = 1 OR pending = 2');		
 		$this->db->where('id_user', $_SESSION['id_akun']);
+		$this->db->order_by('tgl_absen', 'desc');
 		$data['pending'] = $this->db->get('fai_absen')->result();
 
 		$this->load->view('header', $data);

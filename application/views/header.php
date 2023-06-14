@@ -17,9 +17,10 @@
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/ace-skins.min.css" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/ace-rtl.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/jquery-datetimepicker@2.5.20/build/jquery.datetimepicker.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="<?= base_url() ?>assets/js/ace-extra.min.js"></script>
-    
+
     <style>
         .blink_me {
             animation: blinker 1s linear infinite;
@@ -204,6 +205,17 @@
                     <a href="<?= base_url('Absen/tertunda') ?>">
                         <i class="menu-icon glyphicon glyphicon-tag"></i>
                         <span class="menu-text"> Ajukan Absen </span>
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="<?php if ($page == 'Lembur') {
+                                echo "active";
+                            } ?>">
+                    <a href="<?= base_url('Lembur') ?>">
+                        <i class="menu-icon glyphicon glyphicon-time"></i>
+                        <span class="menu-text"> Ajukan Lembur </span>
                     </a>
 
                     <b class="arrow"></b>
