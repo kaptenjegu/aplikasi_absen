@@ -377,7 +377,7 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Anda terlalu jauh ' + ((dist * 300) / 1000).toFixed(2) + ' KM'
+                    text: 'Anda terlalu jauh ' + ((dist * 300) / 100).toFixed(2) + ' KM'
                 })
             }
         }
