@@ -20,10 +20,14 @@ class Login extends CI_Controller
     {
         $email = $this->db->escape_str($this->input->post('email'));
         $password = $this->input->post('password');
-        $this->db->where('email', $email);
-        $this->db->where('password', md5($password));
-        $this->db->where('tgl_delete', null);
-        $user = $this->db->get('fai_akun');
+
+        $this->db->select('*');
+        $this->db->from('fai_akun');
+        $this->db->join('fai_lokasi', 'fai_akun.id_lokasi = fai_lokasi.id_lokasi');
+        $this->db->where('fai_akun.email', $email);
+        $this->db->where('fai_akun.password', md5($password));
+        $this->db->where('fai_akun.tgl_delete', null);
+        $user = $this->db->get('');
 
         if ($user->num_rows() == 1) {
             $data = $user->first_row();
@@ -32,6 +36,11 @@ class Login extends CI_Controller
             $_SESSION['nama_user'] = $data->nama_user;
             $_SESSION['id_jabatan'] = $data->id_jabatan;
             $_SESSION['role_user'] = $data->role_user;
+            $_SESSION['id_lokasi'] = $data->id_lokasi;
+            $_SESSION['nama_lokasi'] = $data->nama_lokasi;
+            $_SESSION['long_lokasi'] = $data->long_lokasi;
+            $_SESSION['lat_lokasi'] = $data->lat_lokasi;
+            $_SESSION['batas_lokasi'] = $data->batas_lokasi;
             $_SESSION['kunci'] = 'Login@Absen';
 
             logdb($_SESSION['id_akun'], 'Login', 'cek_akun', 'fai_akun', 'berhasil login');

@@ -56,6 +56,9 @@
                                 <th>
                                     Jam Absen Pulang
                                 </th>
+                                <th>
+                                    Lokasi Kerja
+                                </th>
                             </tr>
                         </thead>
 
@@ -73,6 +76,10 @@
 
                                 <td>
                                     <span id="jam_pulang"><b><?= $absen->absen_pulang ?? '-' ?></b></span>
+                                </td>
+
+                                <td>
+                                    <span><b><?= $_SESSION['nama_lokasi'] ?></b></span>
                                 </td>
                             </tr>
                         </tbody>

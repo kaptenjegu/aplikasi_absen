@@ -234,7 +234,7 @@
 
     <script>
         //var x = document.getElementById("demo");
-        var min_dist = 0.2; // 0.2 - 60 meter
+        var min_dist = <?= (0.1 * $_SESSION['batas_lokasi']) / 30 ?>;//0.2; // 0.2 - 60 meter
 
         function getLocation() {
             if (navigator.geolocation) {
@@ -281,8 +281,8 @@
         }
 
         function distance(lat, long) {
-            var cx = -7.297968; //latitude kantor
-            var cy = 112.777079; //longitude kantor
+            var cx = <?= $_SESSION['lat_lokasi'] ?>;//-7.297968; //latitude kantor
+            var cy = <?= $_SESSION['long_lokasi'] ?>;//112.777079; //longitude kantor
 
             mx = Math.abs(lat - cx);
             my = Math.abs(long - cy);
