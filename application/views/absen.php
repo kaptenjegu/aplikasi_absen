@@ -59,6 +59,9 @@
                                 <th>
                                     Lokasi Kerja
                                 </th>
+                                <th>
+                                    Jenis Shift
+                                </th>
                             </tr>
                         </thead>
 
@@ -80,6 +83,9 @@
 
                                 <td>
                                     <span><b><?= $_SESSION['nama_lokasi'] ?></b></span>
+                                </td>
+                                <td>
+                                    <span><b><?php if($_SESSION['role_shift'] == 1){echo 'Non Shift';}else{echo 'Shift';} ?></b></span>
                                 </td>
                             </tr>
                         </tbody>
