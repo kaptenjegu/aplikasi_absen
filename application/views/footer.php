@@ -331,8 +331,9 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Gagal',
-                                text: 'Tidak berhasil load data'
+                                text: 'Tidak berhasil load data '
                             })
+                            alert(JSON.stringify(data));
                         }
                     });
                 } else { //pulang

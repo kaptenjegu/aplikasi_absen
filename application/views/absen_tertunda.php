@@ -10,6 +10,7 @@
                     <option value="8">Unpaid Leave</option>
                     <option value="9">Sakit</option>
                     <option value="1">Lupa Absen Masuk</option>
+                    <option value="10">Libur Shift</option>
                 </select>
             </div>
             <div class="form-group">
@@ -71,6 +72,12 @@
                             $status = '<b style="color: red">pending</b>';
                         }elseif($v->pending == 2){
                             $jenis = 'Lupa Absen';
+                            $status = '<b style="color: green">disetujui</b>';
+                        }elseif($v->pending == 10){
+                            $jenis = 'Libur Shift';
+                            $status = '<b style="color: red">pending</b>';
+                        }elseif($v->pending == 11){
+                            $jenis = 'Libur Shift';
                             $status = '<b style="color: green">disetujui</b>';
                         }else{
                             $jenis = 'None';

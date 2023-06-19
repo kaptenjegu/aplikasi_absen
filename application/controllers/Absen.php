@@ -337,7 +337,7 @@ class Absen extends CI_Controller
 
 		$data['cuti'] = $this->cek_cuti();
 
-		$this->db->where('((pending >= 4 AND pending <= 9) OR pending = 1 OR pending = 2)');		
+		$this->db->where('((pending >= 4 AND pending <= 9) OR pending = 1 OR pending = 2 OR pending = 10 OR pending = 11)');		
 		$this->db->where('id_user', $_SESSION['id_akun']);
 		$this->db->order_by('tgl_absen', 'desc');
 		$data['pending'] = $this->db->get('fai_absen')->result();
@@ -406,9 +406,11 @@ class Absen extends CI_Controller
 	public function masuk()
 	{
 		//if (($this->uri->segment(3) == $_SESSION['id_akun'])) {
-		if (($this->uri->segment(3) == $_SESSION['id_akun']) and (date('H') >= 6 and date('H') <= 12)) {
+		//if (($this->uri->segment(3) == $_SESSION['id_akun']) and (((date('H') >= 6 and date('H') <= 12)))) {
+		if (($this->uri->segment(3) == $_SESSION['id_akun']) and (($_SESSION['role_shift'] == '1' AND (date('H') >= 6 and date('H') <= 12)) OR $_SESSION['role_shift'] == '2')) {
 			try {
 				$this->db->trans_start();
+				$data = [];
 				$absen_masuk = date('H:i');
 				$tgl_absen = date('Y-m-d');
 				$id_user = $_SESSION['id_akun'];
@@ -428,6 +430,7 @@ class Absen extends CI_Controller
 					$jam = $absen_masuk;
 				} else {
 					$msg = 'Sudah absen masuk';
+					
 				}
 				logdb($_SESSION['id_akun'], 'Absen', 'masuk', 'fai_absen', 'simpan data masuk - ' . json_encode($data));
 				$this->db->trans_complete();
@@ -454,8 +457,9 @@ class Absen extends CI_Controller
 	public function pulang()
 	{
 		//if (($this->uri->segment(3) == $_SESSION['id_akun'])) {
-		if (($this->uri->segment(3) == $_SESSION['id_akun']) and (((date('H') >= 12 and date('D') == 'Sat') or (date('H') >= 14 and date('D') != 'Sat')) and date('H') <= 20)) {
+		if (($this->uri->segment(3) == $_SESSION['id_akun']) and (($_SESSION['role_shift'] == '1' AND (((date('H') >= 12 and date('D') == 'Sat') or (date('H') >= 14 and date('D') != 'Sat')) and date('H') <= 20)) OR $_SESSION['role_shift'] == '2')	) {
 			try {
+				$data = [];
 				$this->db->trans_start();
 				$absen_pulang = date('H:i');
 				$tgl_absen = date('Y-m-d');
