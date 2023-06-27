@@ -32,10 +32,10 @@ class Akun extends CI_Controller
 	{
 		try {
 			$this->db->trans_start();
-			$this->db->set('nama_user', $this->input->post['nama_user']);
-			$this->db->set('no_telp', $this->input->post['no_telp']);
-			$this->db->set('password', md5($this->input->post['password']));
-			$this->db->where('id_akun', $this->input->post['id_user']);
+			$this->db->set('nama_user', $this->input->post('nama_user'));
+			$this->db->set('no_telp', $this->input->post('no_telp'));
+			$this->db->set('password', md5($this->input->post('password')));
+			$this->db->where('id_akun', $this->input->post('id_user'));
 			$this->db->update('fai_akun');
 
 			logdb($_SESSION['id_akun'], 'Akun', 'simpan', 'fai_akun', 'update data user');
