@@ -298,6 +298,8 @@
             var lat = document.getElementById("lat").value;
             var long = document.getElementById("long").value;
             var dist = document.getElementById("dist").value;
+            var shift = document.getElementById("shift_sore_malam").checked;
+            //console.log(shift);
 
             if (dist <= min_dist) {
                 //alert('absen berhasil');
@@ -338,7 +340,7 @@
                     });
                 } else { //pulang
                     $.ajax({
-                        url: "<?= base_url() ?>Absen/pulang/<?= $_SESSION['id_akun'] ?>",
+                        url: "<?= base_url() ?>Absen/pulang/<?= $_SESSION['id_akun'] ?>/" + shift,
                         type: "GET",
                         dataType: "JSON",
                         success: function(data) {

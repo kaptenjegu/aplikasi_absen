@@ -462,7 +462,15 @@ class Absen extends CI_Controller
 				$data = [];
 				$this->db->trans_start();
 				$absen_pulang = date('H:i');
-				$tgl_absen = date('Y-m-d');
+
+				if($this->uri->segment(4) == "true" OR $this->uri->segment(4) == "True"){
+					$tgl_absen = date('Y-m-d',strtotime("-1 days"));
+				}else{
+					$tgl_absen = date('Y-m-d');
+				}
+				//echo $tgl_absen . '<br>';
+				//echo $this->uri->segment(4);exit();
+				
 				$id_user = $_SESSION['id_akun'];
 				$n = $this->cek_dobel_data($id_user, $tgl_absen, 'pulang');
 

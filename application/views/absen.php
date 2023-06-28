@@ -30,6 +30,12 @@
 
         <button class="btn btn-inverse col-xs-5" onclick="regAbsen('pulang')"><i class="glyphicon glyphicon-time"></i> Pulang</button>
     </div>
+    
+    <div class="col-xs-12">
+    <br><br>
+        <input type="checkbox" class="form-group" name="shift_sore_malam" id="shift_sore_malam" value="shift"> 
+        <label for="shift_sore_malam">Absen Pulang Shift Sore / Shift Malam</label>
+    </div>
 
 </div><!-- /.row -->
 
