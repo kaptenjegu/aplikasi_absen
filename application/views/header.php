@@ -210,16 +210,16 @@
                     <b class="arrow"></b>
                 </li>
 
-                <li class="<?php if ($page == 'Lembur') {
-                                echo "active";
-                            } ?>">
-                    <a href="<?= base_url('Lembur') ?>">
+                <!--li class="<?php //if ($page == 'Lembur') {
+                                //echo "active";
+                            //} ?>">
+                    <a href="<?//= base_url('Lembur') ?>">
                         <i class="menu-icon glyphicon glyphicon-time"></i>
                         <span class="menu-text"> Ajukan Lembur </span>
                     </a>
 
                     <b class="arrow"></b>
-                </li>
+                </li-->
 
                 <li class="<?php if ($page == 'Pengumuman') {
                                 echo "active";

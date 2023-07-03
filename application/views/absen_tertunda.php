@@ -10,7 +10,7 @@
                     <option value="8">Unpaid Leave</option>
                     <option value="9">Sakit</option>
                     <option value="1">Lupa Absen Masuk</option>
-                    <option value="10">Libur Shift</option>
+                    <!--option value="10">Libur Shift</option-->
                 </select>
             </div>
             <div class="form-group">
