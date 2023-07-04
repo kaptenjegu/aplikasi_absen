@@ -6,7 +6,7 @@
             <div class="form-group">
                 <label><b>Pilih Jenis Absen</b></label>
                 <select class="form-control" name="pending">
-                    <option value="7">Cuti</option>
+                    <!--option value="7">Cuti</option-->
                     <option value="8">Unpaid Leave</option>
                     <option value="9">Sakit</option>
                     <option value="1">Lupa Absen Masuk</option>
