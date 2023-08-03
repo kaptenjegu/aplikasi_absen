@@ -337,7 +337,7 @@ class Absen extends CI_Controller
 
 		$data['cuti'] = $this->cek_cuti();
 
-		$this->db->where('((pending >= 4 AND pending <= 9) OR pending = 1 OR pending = 2 OR pending = 10 OR pending = 11)');		
+		$this->db->where('((pending >= 4 AND pending <= 9) OR pending = 1 OR pending = 2 OR pending = 10 OR pending = 11)');
 		$this->db->where('id_user', $_SESSION['id_akun']);
 		$this->db->order_by('tgl_absen', 'desc');
 		$data['pending'] = $this->db->get('fai_absen')->result();
@@ -368,28 +368,28 @@ class Absen extends CI_Controller
 				$user = $this->db->get('fai_akun')->first_row();
 				$sisa_cuti = $user->sisa_cuti;
 
-				if ($sisa_cuti > 0) {	//cek sisa cuti
-					$data = array(
-						'id_absen' => randid(),
-						'id_user' => $id_user,
-						'tgl_absen' => $tgl_absen,
-						'absen_masuk' 	=> $absen_masuk,
-						'absen_pulang' 	=> '',
-						'pending' 	=> $pending,
-						'catatan_pending' 	=> $keterangan
-					);
-					$this->db->insert('fai_absen', $data);
+				//if ($sisa_cuti > 0) {	//cek sisa cuti
+				$data = array(
+					'id_absen' => randid(),
+					'id_user' => $id_user,
+					'tgl_absen' => $tgl_absen,
+					'absen_masuk' 	=> $absen_masuk,
+					'absen_pulang' 	=> '',
+					'pending' 	=> $pending,
+					'catatan_pending' 	=> $keterangan
+				);
+				$this->db->insert('fai_absen', $data);
 
-					$this->db->set('sisa_cuti', $sisa_cuti - 1);
-					$this->db->where('id_akun', $_SESSION['id_akun']);
-					$this->db->update('fai_akun');
+				$this->db->set('sisa_cuti', $sisa_cuti - 1);
+				$this->db->where('id_akun', $_SESSION['id_akun']);
+				$this->db->update('fai_akun');
 
-					$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+				$this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
 					<center><b>Data Sudah Disimpan</b></center></div>');
-				} else {
-					$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
-					<center><b>Jatah Cuti telah habis</b></center></div>');
-				}				
+				//} else {
+				//	$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+				//	<center><b>Jatah Cuti telah habis</b></center></div>');
+				//}				
 			} else {
 				$this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
 					<center><b>Data Sudah Ada</b></center></div>');
@@ -407,7 +407,7 @@ class Absen extends CI_Controller
 	{
 		//if (($this->uri->segment(3) == $_SESSION['id_akun'])) {
 		//if (($this->uri->segment(3) == $_SESSION['id_akun']) and (((date('H') >= 6 and date('H') <= 12)))) {
-		if (($this->uri->segment(3) == $_SESSION['id_akun']) and (($_SESSION['role_shift'] == '1' AND (date('H') >= 6 and date('H') <= 12)) OR $_SESSION['role_shift'] == '2')) {
+		if (($this->uri->segment(3) == $_SESSION['id_akun']) and (($_SESSION['role_shift'] == '1' and (date('H') >= 6 and date('H') <= 12)) or $_SESSION['role_shift'] == '2')) {
 			try {
 				$this->db->trans_start();
 				$data = [];
@@ -430,7 +430,6 @@ class Absen extends CI_Controller
 					$jam = $absen_masuk;
 				} else {
 					$msg = 'Sudah absen masuk';
-					
 				}
 				logdb($_SESSION['id_akun'], 'Absen', 'masuk', 'fai_absen', 'simpan data masuk - ' . json_encode($data));
 				$this->db->trans_complete();
@@ -457,20 +456,20 @@ class Absen extends CI_Controller
 	public function pulang()
 	{
 		//if (($this->uri->segment(3) == $_SESSION['id_akun'])) {
-		if (($this->uri->segment(3) == $_SESSION['id_akun']) and (($_SESSION['role_shift'] == '1' AND (((date('H') >= 12 and date('D') == 'Sat') or (date('H') >= 14 and date('D') != 'Sat')) and date('H') <= 20)) OR $_SESSION['role_shift'] == '2')	) {
+		if (($this->uri->segment(3) == $_SESSION['id_akun']) and (($_SESSION['role_shift'] == '1' and (((date('H') >= 12 and date('D') == 'Sat') or (date('H') >= 14 and date('D') != 'Sat')) and date('H') <= 20)) or $_SESSION['role_shift'] == '2')) {
 			try {
 				$data = [];
 				$this->db->trans_start();
 				$absen_pulang = date('H:i');
 
-				if($this->uri->segment(4) == "true" OR $this->uri->segment(4) == "True"){
-					$tgl_absen = date('Y-m-d',strtotime("-1 days"));
-				}else{
+				if ($this->uri->segment(4) == "true" or $this->uri->segment(4) == "True") {
+					$tgl_absen = date('Y-m-d', strtotime("-1 days"));
+				} else {
 					$tgl_absen = date('Y-m-d');
 				}
 				//echo $tgl_absen . '<br>';
 				//echo $this->uri->segment(4);exit();
-				
+
 				$id_user = $_SESSION['id_akun'];
 				$n = $this->cek_dobel_data($id_user, $tgl_absen, 'pulang');
 
