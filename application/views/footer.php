@@ -80,6 +80,85 @@
     </script>
 <?php } ?>
 
+<?php if ($page == 'Pinjam_barang') { ?>
+    <script type="text/javascript">
+        var modal_sukses = document.getElementById("fb_sukses");
+        var modal_gagal = document.getElementById("fb_gagal");
+
+        function show_sukses() {
+            modal_sukses.style.display = "block";
+        }
+
+        function show_gagal() {
+            modal_gagal.style.display = "block";
+        }
+
+        function close_sukses() {
+            modal_sukses.style.display = "none";
+        }
+
+        function close_gagal() {
+            modal_gagal.style.display = "none";
+        }
+
+        function validateForm() {
+            var n1 = document.getElementById("asetForm").elements["total_barang"].value;
+            var loading = document.getElementById("loading");
+            var msg = document.getElementById("msg");
+            //var x = document.forms["asetForm"]["id_barang"].value;
+            var n2, id, qty;
+            var total = 0;
+            var qr = [];
+            var id_barang = [];
+            loading.style.display = "block";
+            for (var n = 0; n < n1; n++) {
+                id = document.getElementsByName("id_barang[]")[n].value;
+                qty = document.getElementById("qty_" + id).innerHTML;
+                //console.log(qty);
+                if (document.getElementById("id_" + id).checked) {
+                    if ((document.getElementById("qr_" + id).value > 0) || (document.getElementById("qr_" + id).value)) {
+                        let qre = document.getElementById("qr_" + id).value;
+                        //console.log(qre);
+                        if ((qty - qre) >= 0) {
+                            qr.push(qre);
+                            id_barang.push(id);
+                        } else {
+                            return alert('Quantity Pinjam tidak boleh lebih besar dari Quantity Tersedia');
+                        }
+                    } else {
+                        return alert('Quantity Pinjam tidak boleh kosong !!!');
+                    }
+                }
+            }
+            console.log(qr);
+            console.log(id_barang);
+
+            $.ajax({
+                url: "<?= base_url() ?>Pinjam_barang/simpan_data/",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    id_barang: id_barang,
+                    qr : qr
+                },
+                success: function(data) {
+                    console.log(data)
+                    if(data['kode'] == 1){show_sukses();}
+                    else{msg.innerHTML = 'ERROR : ' + data['msg'];show_gagal();}
+                    
+                },
+                error: function(data) {
+                    //alert('error');
+                    msg.value = data['msg'];
+                    show_gagal();
+                    console.log(data);
+                }
+            });
+            loading.style.display = "none";
+        }
+    </script>
+<?php } ?>
+
 <?php if ($page == 'Riwayat') { ?>
     <script type="text/javascript">
         jQuery(function($) {
@@ -90,6 +169,27 @@
                     bAutoWidth: false,
                     "aoColumns": [
                         null, null, null, null
+                    ],
+                    "aaSorting": [],
+                    select: {
+                        style: 'multi'
+                    }
+                });
+
+        })
+    </script>
+<?php } ?>
+
+<?php if ($page == 'Riwayat_pinjam') { ?>
+    <script type="text/javascript">
+        jQuery(function($) {
+            //initiate dataTables plugin
+            var myTable =
+                $('#dynamic-table')
+                .DataTable({
+                    bAutoWidth: false,
+                    "aoColumns": [
+                        null, null, null, null,null,null
                     ],
                     "aaSorting": [],
                     select: {
@@ -169,7 +269,7 @@
         $("#mulai_lembur").daterangepicker({
             timePicker: true,
             timePicker24Hour: true,
-            singleDatePicker:true,
+            singleDatePicker: true,
             timePickerIncrement: 1,
             timePickerSeconds: false,
             locale: {
@@ -182,7 +282,7 @@
         $("#selesai_lembur").daterangepicker({
             timePicker: true,
             timePicker24Hour: true,
-            singleDatePicker:true,
+            singleDatePicker: true,
             timePickerIncrement: 1,
             timePickerSeconds: false,
             locale: {
@@ -234,7 +334,7 @@
 
     <script>
         //var x = document.getElementById("demo");
-        var min_dist = <?= (0.1 * $_SESSION['batas_lokasi']) / 30 ?>;//0.2; // 0.2 - 60 meter
+        var min_dist = <?= (0.1 * $_SESSION['batas_lokasi']) / 30 ?>; //0.2; // 0.2 - 60 meter
 
         function getLocation() {
             if (navigator.geolocation) {
@@ -281,8 +381,8 @@
         }
 
         function distance(lat, long) {
-            var cx = <?= $_SESSION['lat_lokasi'] ?>;//-7.297968; //latitude kantor
-            var cy = <?= $_SESSION['long_lokasi'] ?>;//112.777079; //longitude kantor
+            var cx = <?= $_SESSION['lat_lokasi'] ?>; //-7.297968; //latitude kantor
+            var cy = <?= $_SESSION['long_lokasi'] ?>; //112.777079; //longitude kantor
 
             mx = Math.abs(lat - cx);
             my = Math.abs(long - cy);

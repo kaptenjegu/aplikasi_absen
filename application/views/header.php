@@ -21,6 +21,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="<?= base_url() ?>assets/js/ace-extra.min.js"></script>
 
+    
+
     <style>
         .blink_me {
             animation: blinker 1s linear infinite;
@@ -103,17 +105,17 @@
             </div>
 
             <div class="navbar-buttons navbar-header pull-right" role="navigation">
-                <ul class="nav ace-nav" >
+                <ul class="nav ace-nav">
 
                     <!-- pengumuman header -->
                     <li class="dropdown-modal">
                         <a class="dropdown-toggle" style="background-color: #438EB9;" href="<?= base_url('Pengumuman') ?>">
                             <?php
                             $n_notif = get_notif()->num_rows();
-                            if($n_notif > 0){
+                            if ($n_notif > 0) {
                                 echo '<i class="ace-icon fa fa-bullhorn icon-animated-vertical"></i>';
                                 echo '<span class="badge badge-warning">' . $n_notif . '</span>';
-                            }else{
+                            } else {
                                 echo '<i class="ace-icon fa fa-bullhorn"></i>';
                             }
                             ?>
@@ -127,7 +129,8 @@
                             <img class="nav-user-photo" src="<?= base_url() ?>assets/images/avatars/avatar2.png" alt="Jason's Photo" />
                             <span class="user-info">
                                 <small>Welcome,</small>
-                                <?//= $_SESSION['nama_user'] ?>
+                                <? //= $_SESSION['nama_user'] 
+                                ?>
                                 User
                             </span>
 
@@ -199,7 +202,7 @@
                     <b class="arrow"></b>
                 </li>
 
-                <li class="<?php if ($page == 'Absen_tertunda' OR $page == 'Absen_tertunda2') {
+                <li class="<?php if ($page == 'Absen_tertunda' or $page == 'Absen_tertunda2') {
                                 echo "active";
                             } ?>">
                     <a href="<?= base_url('Absen/tertunda') ?>">
@@ -210,10 +213,45 @@
                     <b class="arrow"></b>
                 </li>
 
+                <li class="<?php if ($page == 'Pinjam_barang') {
+                                echo "active";
+                            } ?>">
+                    <a href="<?= base_url('Pinjam_barang') ?>">
+                        <i class="menu-icon fa fa-shopping-cart"></i>
+                        <span class="menu-text"> Pinjam Barang </span>
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="<?php if ($page == 'Pengembalian_barang') {
+                                echo "active";
+                            } ?>">
+                    <a href="<?= base_url('Pengembalian_barang') ?>">
+                        <i class="menu-icon fa fa-exchange"></i>
+                        <span class="menu-text"> Pengembalian Barang </span>
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="<?php if ($page == 'Riwayat_pinjam') {
+                                echo "active";
+                            } ?>">
+                    <a href="<?= base_url('Pinjam_barang/riwayat/') ?>">
+                        <i class="menu-icon fa fa-book"></i>
+                        <span class="menu-text"> Riwayat Pinjam</span>
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
                 <!--li class="<?php //if ($page == 'Lembur') {
                                 //echo "active";
-                            //} ?>">
-                    <a href="<?//= base_url('Lembur') ?>">
+                                //} 
+                                ?>">
+                    <a href="<? //= base_url('Lembur') 
+                                ?>">
                         <i class="menu-icon glyphicon glyphicon-time"></i>
                         <span class="menu-text"> Ajukan Lembur </span>
                     </a>
@@ -230,11 +268,11 @@
                             Notifikasi
                             <?php
                             $n_notif = get_notif()->num_rows();
-                            if($n_notif > 0){
+                            if ($n_notif > 0) {
                                 echo '<span class="badge badge-warning">' . $n_notif . '</span>';
                             }
                             ?>
-                            
+
                         </span>
                     </a>
 
