@@ -135,17 +135,16 @@
     <div class="col-xs-12">
         <form method="GET" action="<?= base_url('Pinjam_barang/index/') ?>">
             <div class="form-group">
-                <label><b>Pilih Lokasi Barang</b></label>
+                <label><b>Pilih Lokasi Barang Asal</b></label>
                 <select class="form-control" name="id_lokasi">
                     <?php foreach ($lokasi as $v) {
                         $slc = '';
-                        if(isset($_GET['id_lokasi'])){
-                            if($_GET['id_lokasi'] == $v->id_lokasi){
+                        if (isset($_GET['id_lokasi'])) {
+                            if ($_GET['id_lokasi'] == $v->id_lokasi) {
                                 $slc = 'selected="selected"';
                             }
                         }
-                            echo '<option value="' . $v->id_lokasi . '" ' . $slc . '>' . $v->nama_lokasi . '</option>';
-                            
+                        echo '<option value="' . $v->id_lokasi . '" ' . $slc . '>' . $v->nama_lokasi . '</option>';
                     } ?>
                 </select>
             </div>
@@ -162,6 +161,22 @@
 <?php if ($id_lokasi !== '') { ?>
     <div class="row">
         <form id="asetForm">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label><b>Lokasi Barang dipakai</b></label>
+                    <select class="form-control" name="id_lokasi_pakai">
+                        <?php foreach ($lokasi as $v) {
+                            $slc = '';
+                            if ($_SESSION['id_lokasi'] == $v->id_lokasi) {
+                                $slc = 'selected="selected"';
+                            }
+
+                            echo '<option value="' . $v->id_lokasi . '" ' . $slc . '>' . $v->nama_lokasi . '</option>';
+                        } ?>
+                    </select>
+                </div>
+
+            </div>
             <div class="col-sm-12" style="overflow-y: auto;height: 270px;">
                 <div>
                     <table id="dynamic-table" class="table table-striped table-bordered table-hover">
@@ -205,36 +220,36 @@
     <?php } ?>
     </div>
 
-<!-- MODAL SUKSES -->
-<div id="fb_sukses" class="modal fade in" tabindex="-1" style="margin-top: 0%;background-color: black;opacity: 0.8;">
-    <div class="modal-dialog" style="margin-top: 10%;opacity: 2;">
-        <div class="modal-content">
-            <!--div class="modal-header">
+    <!-- MODAL SUKSES -->
+    <div id="fb_sukses" class="modal fade in" tabindex="-1" style="margin-top: 0%;background-color: black;opacity: 0.8;">
+        <div class="modal-dialog" style="margin-top: 10%;opacity: 2;">
+            <div class="modal-content">
+                <!--div class="modal-header">
                 <button type="button" onclick="close_sukses()" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h3 class="smaller lighter blue no-margin" style="text-align: center;">Pesan</h3>
             </div-->
 
-            <div class="modal-body" style="font-size: 20px;color: green;font-weight: bold;text-align: center;">
-                Data Berhasil Disimpan<br><br>
-                <a href="<?= base_url('Pinjam_barang') ?>" class="btn btn-success">Ok</a>
-            </div>
+                <div class="modal-body" style="font-size: 20px;color: green;font-weight: bold;text-align: center;">
+                    Data Berhasil Disimpan<br><br>
+                    <a href="<?= base_url('Pinjam_barang') ?>" class="btn btn-success">Ok</a>
+                </div>
 
+            </div>
         </div>
     </div>
-</div>
-<!-- MODAL SUKSES -->
+    <!-- MODAL SUKSES -->
 
-<!-- MODAL GAGAL-->
-<div id="fb_gagal" class="modal fade in" tabindex="-1"  style="margin-top: 0%;background-color: black;opacity: 0.8;">
-    <div class="modal-dialog" style="margin-top: 10%;opacity: 10;">
-        <div class="modal-content" style="font-size: 20px;color: red;font-weight: bold;text-align: center;">
-            <div class="modal-body">
-                <span  id="msg">Message</span>
-                <br><br>
-                <button onclick="close_gagal()" class="btn btn-danger">Ok</button>
+    <!-- MODAL GAGAL-->
+    <div id="fb_gagal" class="modal fade in" tabindex="-1" style="margin-top: 0%;background-color: black;opacity: 0.8;">
+        <div class="modal-dialog" style="margin-top: 10%;opacity: 10;">
+            <div class="modal-content" style="font-size: 20px;color: red;font-weight: bold;text-align: center;">
+                <div class="modal-body">
+                    <span id="msg">Message</span>
+                    <br><br>
+                    <button onclick="close_gagal()" class="btn btn-danger">Ok</button>
+                </div>
+
             </div>
-
         </div>
     </div>
-</div>
-<!-- MODAL GAGAL -->
+    <!-- MODAL GAGAL -->

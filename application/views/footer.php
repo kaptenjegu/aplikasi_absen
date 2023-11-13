@@ -103,6 +103,7 @@
 
         function validateForm() {
             var n1 = document.getElementById("asetForm").elements["total_barang"].value;
+            var id_lokasi_pakai = document.getElementById("asetForm").elements["id_lokasi_pakai"].value;
             var loading = document.getElementById("loading");
             var msg = document.getElementById("msg");
             //var x = document.forms["asetForm"]["id_barang"].value;
@@ -139,13 +140,13 @@
                 dataType: "json",
                 data: {
                     id_barang: id_barang,
+                    id_lokasi_pakai : id_lokasi_pakai,
                     qr : qr
                 },
                 success: function(data) {
                     console.log(data)
                     if(data['kode'] == 1){show_sukses();}
-                    else{msg.innerHTML = 'ERROR : ' + data['msg'];show_gagal();}
-                    
+                    else{msg.innerHTML = 'ERROR : ' + data['msg'];show_gagal();}                    
                 },
                 error: function(data) {
                     //alert('error');

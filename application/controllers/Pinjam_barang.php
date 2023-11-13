@@ -53,6 +53,7 @@ class Pinjam_barang extends CI_Controller
             date_default_timezone_set('Asia/Jakarta');
 
             $id_barang = $this->input->post('id_barang');
+            $id_lokasi_pakai = $this->input->post('id_lokasi_pakai');
             $qr = $this->input->post('qr');
             $kode = 2;
 
@@ -63,13 +64,10 @@ class Pinjam_barang extends CI_Controller
             for ($n = 0; $n < count($qr); $n++) {
                 //generate query
                 if ($n == count($qr) - 1) { 
-                    $q .= "('" . randid() . "','" . $id_barang[$n] . "'," . $qr[$n] . " ,'" . date('Y-m-d') . "', '', 1, '" . $this->kondisi_barang($id_barang[$n]) . "', '','" . $_SESSION['id_lokasi'] . "', '" . $_SESSION['id_akun'] . "')";
+                    $q .= "('" . randid() . "','" . $id_barang[$n] . "'," . $qr[$n] . " ,'" . date('Y-m-d') . "', '', 1, '" . $this->kondisi_barang($id_barang[$n]) . "', '','" . $id_lokasi_pakai . "', '" . $_SESSION['id_akun'] . "')";
                 } else {
-                    $q .= "('" . randid() . "','" . $id_barang[$n] ."'," . $qr[$n] . " , '" . date('Y-m-d') . "', '', 1, '" . $this->kondisi_barang($id_barang[$n]) . "', '','" . $_SESSION['id_lokasi'] . "', '" . $_SESSION['id_akun'] . "'),";
+                    $q .= "('" . randid() . "','" . $id_barang[$n] ."'," . $qr[$n] . " , '" . date('Y-m-d') . "', '', 1, '" . $this->kondisi_barang($id_barang[$n]) . "', '','" . $id_lokasi_pakai . "', '" . $_SESSION['id_akun'] . "'),";
                 }
-
-                //kurangi qty barang
-                //$this->kurangi_qty($id_barang[$n], $qr[$n]);
             }
             
             $this->db->query($q);
