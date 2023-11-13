@@ -213,9 +213,11 @@
 
                 </div>
             </div>
+            <?php if(count($aset) > 0){ ?>
             <div class="col-sm-12">
                 <input type="button" onclick="validateForm()" class="btn btn-success" value="Simpan">
             </div>
+            <?php } ?>
         </form>
     <?php } ?>
     </div>
