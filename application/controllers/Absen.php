@@ -423,7 +423,8 @@ class Absen extends CI_Controller
 						'absen_masuk' 	=> $absen_masuk,
 						'absen_pulang' 	=> '',
 						'pending' 	=> 0,
-						'catatan_pending' 	=> ''
+						'catatan_pending' 	=> '',
+						'id_lokasi' 	=> $_SESSION['id_lokasi']
 					);
 					$this->db->insert('fai_absen', $data);
 					$msg = 'Absen Masuk berhasil';
